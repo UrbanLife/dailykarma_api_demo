@@ -1,0 +1,30 @@
+version: "3.8"
+
+services:
+  dk_front:
+    container_name: dk_api_front
+    build:
+      context: ./
+      dockerfile: ./docker/dk_front.Dockerfile
+    depends_on:
+      - dk_back
+    env_file:
+      - ./docker/front.env
+    ports:
+      - 80:80
+    volumes:
+      - ./dist:/app
+      - ./logs:/var/log/nginx/log
+  dk_back:
+    container_name: dk_api_back
+    build:
+      context: ./selfback
+      dockerfile: ../docker/dk_back.Dockerfile
+      target: development
+    ports:
+      - 8080
+    env_file:
+      - ./docker/selfback.env
+    restart: always
+    volumes:
+      - ./selfback:/usr/src/app

@@ -1,0 +1,19 @@
+/* mobile */
+@media screen and (max-width: 768px) {
+  @import "devices/mobile";
+}
+
+/* tablet */
+@media screen and (max-width: 1024px) {
+  @import "devices/tablet";
+}
+
+/* desktop */
+@media screen and (max-width: 1280px) {
+  @import "devices/desktop";
+}
+
+/* large desktop */
+@media screen and (min-width: 1281px) {
+  @import "devices/large_desktop";
+}
