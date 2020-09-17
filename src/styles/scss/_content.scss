@@ -1,0 +1,26 @@
+#container {
+
+  .install-page {
+    & > p {
+      font-size: 18pt;
+      margin-top: 100px;
+    }
+
+    .install {
+      width: 200px;
+      height: 60px;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      margin-top: -50px;
+      margin-left: -100px;
+      @include button(#FFF, #000);
+      @include box-shadow(0, 10px, 16px, rgba(0, 0, 0, 0.2));
+
+      p {
+        font-size: 16pt;
+        transform: translateY(16px);
+      }
+    }
+  }
+}

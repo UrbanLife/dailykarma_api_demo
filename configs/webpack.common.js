@@ -30,7 +30,7 @@ module.exports = {
         modules: ['node_modules', 'app', 'styles'],
         extensions: ['.js', '.vue'],
         alias: {
-            'api': path.resolve(__dirname, '../api'),
+            'api': path.resolve(__dirname, '../src/api'),
             'assets': path.resolve(__dirname, '../src/assets'),
             'components': path.resolve(__dirname, '../src/components'),
             'plugins': path.resolve(__dirname, '../src/plugins'),

@@ -40,6 +40,9 @@ export default {
   },
   methods: {
     initEventHandlers() {
+      return this.$store.subscribe((mutation, state) => {
+        // ...
+      });
     },
     ...mapActions({
       getCharities: 'charities/fetchCharities',

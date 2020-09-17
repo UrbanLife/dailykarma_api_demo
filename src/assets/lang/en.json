@@ -1,4 +1,8 @@
 {
   "notify": {
+    "install": {
+      "failed": "Something went wrong while installation. Please, try again.",
+      "success": "Installed successfully!"
+    }
   }
 }

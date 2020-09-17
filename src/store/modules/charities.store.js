@@ -22,7 +22,7 @@ const actions = {
             let res = await api.charities.fetch();
             commit('UPDATE_CHARITIES', res.result);
         } catch (e) {
-            console.log("Charities were not fetched...");
+            throw new Error("Charities were not fetched...");
         }
     },
 }
