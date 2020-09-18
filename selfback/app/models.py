@@ -5,8 +5,10 @@ from app import db
 
 
 class User(db.Model):
-    username = CharField()
-    email = CharField()
+    username = CharField(default=None)
+    email = CharField(unique=True, default=None)
+    auth_key = CharField(default=None)
+    token = CharField(default=None, null=True)
     created_at = DateTimeField(default=datetime.now())
 
     def __unicode__(self):
@@ -15,5 +17,7 @@ class User(db.Model):
     def serialize(self):
         return {
             'username': self.username,
-            'email': self.email
+            'email': self.email,
+            'auth_key': self.auth_key,
+            'created_at': self.created_at
         }

@@ -15,7 +15,8 @@ import {mapActions, mapGetters, mapState} from "vuex";
 export default {
   data() {
     return {
-      title: 'Daily Karma ShowCase'
+      title: 'Daily Karma ShowCase',
+      loadingComponent: null
     }
   },
   created() {
@@ -35,31 +36,60 @@ export default {
   methods: {
     initEventHandlers() {
       return this.$store.subscribe((mutation, state) => {
-        // ...
+        if (mutation.type === 'user/SET_AUTH_KEY') {
+          this.loadingComponent = this.$buefy.loading.open({
+            container: null
+          });
+          this.authorizeInstall();
+        }
+        if (mutation.type === 'user/INSTALL_AUTHORIZED') {
+          this.$buefy.toast.open({
+            message: this.$t('notify.install.success'),
+            type: 'is-success'
+          });
+          this.loadingComponent.close();
+          this.$router.push({name: 'dashboard'});
+        }
       });
     },
     ...mapActions({
-      getCharities: 'charities/fetchCharities'
+      setAuthKey: 'user/setAuthKey',
+      runAuthorization: 'user/runAuthorization'
     }),
-    ...mapGetters({}),
+    ...mapGetters({
+      authKey: 'user/getAuthKey'
+    }),
     initDashboard() {
-      // init
     },
-    async startInstallation() {
-      try {
-        let charities = await this.getCharities();
-        this.$buefy.toast.open({
-          message: this.$t('notify.install.success'),
-          type: 'is-success'
-        });
-        await this.$router.push({name: 'dashboard'});
-      } catch (err) {
-        this.$buefy.toast.open({
-          message: this.$t('notify.install.failed'),
-          type: 'is-warning'
-        });
-      }
-    }
+    startInstallation() {
+      this.$buefy.dialog.prompt({
+        message: `Enter your Authorization key`,
+        inputAttrs: {
+          placeholder: '',
+          maxlength: 32
+        },
+        trapFocus: true,
+        onConfirm: (auth_key) => this.setAuthorizationKey(auth_key)
+      });
+    },
+    setAuthorizationKey(auth_key) {
+      this.setAuthKey(auth_key)
+          .then(() => {
+            this.$buefy.toast.open({
+              message: this.$t('notify.install.auth.key_installed'),
+              type: 'is-success'
+            });
+          })
+          .catch((err) => {
+            this.$buefy.toast.open({
+              message: `${err.message}`,
+              type: 'is-warning'
+            });
+          });
+    },
+    async authorizeInstall() {
+      await this.runAuthorization();
+    },
   },
 }
 </script>

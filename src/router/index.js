@@ -24,14 +24,19 @@ const router = new Router({
 router.beforeEach((to, from, next) => {
     const publicPages = ['install'];
     const authRequired = !publicPages.includes(to.name);
-    const token = localStorage.getItem('token');
+    const auth_key = localStorage.getItem('auth_key');
 
     if (authRequired) {
-        checkAccess({'token': token || ''})
-            .then(() => {
-                next();
+        checkAccess({'auth_key': auth_key || ''})
+            .then((res) => {
+                if (res.authorized) {
+                    next();
+                } else {
+                    next({name: 'install'});
+                }
             })
-            .catch(() => {
+            .catch((err) => {
+                console.log(err);
                 next({name: 'install'});
             });
     } else {

@@ -2,7 +2,10 @@
   "notify": {
     "install": {
       "failed": "Something went wrong while installation. Please, try again.",
-      "success": "Installed successfully!"
+      "success": "Installed successfully!",
+      "auth": {
+        "key_installed": "Auth key has been set"
+      }
     }
   }
 }
