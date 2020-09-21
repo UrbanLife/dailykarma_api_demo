@@ -3,7 +3,9 @@ import api from 'api';
 
 
 const initialState = () => ({
-    'all': null,
+    'available': null,
+    'installed': null,
+    'search_result': null,
 });
 
 const state = initialState();
@@ -11,20 +13,68 @@ const state = initialState();
 /**
  * User state getters
  */
-const getters = {}
+const getters = {
+    /**
+     * Get charities installed into the store
+     * @param state
+     * @returns {null|boolean}
+     */
+    getInstalledCharities(state) {
+        return state.installed;
+    },
+    getFoundCharities(state) {
+        return state.search_result;
+    }
+}
 
 /**
  * User state actions
  */
 const actions = {
-    async fetchCharities({commit}) {
+    /**
+     * Search charities that can be installed into the store
+     * @param commit
+     * @param data
+     * @returns {Promise<void>}
+     */
+    async searchCharities({commit}, data) {
         try {
-            let res = await api.charities.fetch();
-            commit('UPDATE_CHARITIES', res.result);
+            let res = await api.charities.search(data);
+            commit('FOUND_CHARITIES', res.result);
         } catch (e) {
             throw new Error("Charities were not fetched...");
         }
     },
+    /**
+     * Get charities installed into the store
+     * @param commit
+     * @returns {Promise<void>}
+     */
+    async fetchCharities({commit}) {
+        try {
+            const res = await api.store.charities();
+            commit('INSTALLED_CHARITIES', res.result);
+        } catch (e) {
+            throw new Error(e.message);
+        }
+    },
+    /**
+     * Add charity to the store
+     * @param commit
+     * @param data
+     * @returns {Promise<void>}
+     */
+    async addCharity({commit}, data) {
+        try {
+            const res = await api.store.addCharity(data);
+            commit('CHARITY_INSTALLED', res.result);
+        } catch (e) {
+            throw new Error(e.message);
+        }
+    },
+    eraseSearchResult({commit}) {
+        commit('FOUND_CHARITIES', {});
+    }
 }
 
 /**
@@ -32,7 +82,15 @@ const actions = {
  */
 const mutations = {
     UPDATE_CHARITIES(state, data) {
-        state.all = data;
+        state.available = data;
+    },
+    INSTALLED_CHARITIES(state, data) {
+        state.installed = data;
+    },
+    FOUND_CHARITIES(state, data) {
+        state.search_result = data;
+    },
+    CHARITY_INSTALLED() {
     },
 }
 

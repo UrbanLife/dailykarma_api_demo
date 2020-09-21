@@ -1,6 +1,7 @@
 #container {
 
   .install-page {
+    text-align: center;
     & > p {
       font-size: 18pt;
       margin-top: 100px;
@@ -20,6 +21,32 @@
       p {
         font-size: 16pt;
         transform: translateY(16px);
+      }
+    }
+  }
+
+  .installed-charities {
+    width: 600px;
+    line-height: 1.2;
+
+    .box {
+      padding: 0.5rem;
+      margin-bottom: 0.3em;
+    }
+  }
+
+  .btn-browse-charities {
+    @include button(#e369b0, #fff);
+  }
+
+  .browse-charities {
+    .search-box {
+      margin-bottom: 40px;
+    }
+
+    .found-charities {
+      .install-charity {
+        @include button(#e369b0, #fff);
       }
     }
   }

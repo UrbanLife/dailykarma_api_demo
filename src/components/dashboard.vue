@@ -1,9 +1,27 @@
 <template>
   <div id="container">
-    DailyKarma API
-
-    <div v-for="item in charities.all">
-      <p class="charity">{{ item.name }}</p>
+    <div class="is-full column">
+      <div class="btn-browse-charities" @click="browseCharities">
+        <p>Browse All Charities</p>
+      </div>
+    </div>
+    <div class="installed-charities">
+      <div class="box" v-for="charity in installed_charities">
+        <article class="media">
+          <div class="media-left">
+            <figure class="image is-96x96">
+              <img :src="charity.thumbnailUrl||'https://bulma.io/images/placeholders/96x96.png'" :alt="charity.name">
+            </figure>
+          </div>
+          <div class="media-content">
+            <div class="content">
+              <p>
+                <strong>{{ charity.name }}</strong>
+              </p>
+            </div>
+          </div>
+        </article>
+      </div>
     </div>
   </div>
 </template>
@@ -22,6 +40,7 @@ export default {
   data() {
     return {
       title: 'DailyKarma',
+      installed_charities: null,
     };
   },
   created() {
@@ -41,16 +60,23 @@ export default {
   methods: {
     initEventHandlers() {
       return this.$store.subscribe((mutation, state) => {
-        // ...
+        if (mutation.type === 'charities/INSTALLED_CHARITIES') {
+          this.installed_charities = this.installedCharities();
+        }
       });
     },
     ...mapActions({
-      getCharities: 'charities/fetchCharities',
+      fetchCharities: 'charities/fetchCharities',
     }),
-    ...mapGetters({}),
+    ...mapGetters({
+      installedCharities: 'charities/getInstalledCharities'
+    }),
     initDashboard() {
-      this.getCharities();
+      this.fetchCharities();
     },
+    browseCharities() {
+      this.$router.push({ name: 'charities' });
+    }
   },
 }
 </script>

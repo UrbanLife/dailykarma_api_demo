@@ -6,7 +6,9 @@ export default axios.create({
         'Content-Type': 'application/json',
         'Authorization': {
             toString() {
-                return `Bearer ${localStorage.getItem('auth_key')}`
+                const token = localStorage.getItem('token');
+                const auth_key = localStorage.getItem('auth_key');
+                return token ? `Bearer ${token}` : `Bearer ${auth_key}`;
             }
         },
     }
