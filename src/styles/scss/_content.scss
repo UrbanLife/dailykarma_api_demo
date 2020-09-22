@@ -2,6 +2,7 @@
 
   .install-page {
     text-align: center;
+
     & > p {
       font-size: 18pt;
       margin-top: 100px;
@@ -32,11 +33,17 @@
     .box {
       padding: 0.5rem;
       margin-bottom: 0.3em;
+
+      .remove-charity {
+        margin-top: auto;
+        @include button(#e31e90, #fff);
+      }
     }
   }
 
   .btn-browse-charities {
-    @include button(#e369b0, #fff);
+    margin-bottom: 20px;
+    @include button(#44be2b, #fff);
   }
 
   .browse-charities {
@@ -44,9 +51,61 @@
       margin-bottom: 40px;
     }
 
-    .found-charities {
-      .install-charity {
+    .selected_categories {
+      display: flex;
+      flex-flow: wrap;
+      margin-bottom: 20px;
+
+      .category {
+        margin-left: 6px;
+        margin-bottom: 6px;
+      }
+
+      span.category {
         @include button(#e369b0, #fff);
+        cursor: auto;
+      }
+
+      span.remove {
+        color: #000;
+        position: absolute;
+        margin-left: -25px;
+        transform: translateY(3px);
+        width: 20px;
+        text-align: center;
+        cursor: pointer;
+      }
+    }
+
+    .categories {
+      display: flex;
+      flex-flow: wrap;
+      margin-bottom: 20px;
+
+      .category {
+        margin: 6px 4px;
+
+        span {
+          cursor: pointer;
+          padding: 4px 10px;
+          @include box-shadow(0, 0, 5px, #ccc);
+          @include rounded(0.7em);
+
+          &:hover {
+            @include box-shadow(0, 0, 3px, #209cee);
+          }
+        }
+      }
+    }
+
+    .found-charities {
+      .card {
+        margin-bottom: 20px;
+
+        .install-charity {
+          margin: 4px 10px 4px auto;
+          @include button(#e369b0, #fff);
+        }
       }
     }
   }

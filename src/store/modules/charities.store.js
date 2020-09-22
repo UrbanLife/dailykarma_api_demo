@@ -1,4 +1,3 @@
-import router from 'router';
 import api from 'api';
 
 
@@ -53,7 +52,7 @@ const actions = {
     async fetchCharities({commit}) {
         try {
             const res = await api.store.charities();
-            commit('INSTALLED_CHARITIES', res.result);
+            commit('FETCH_CHARITIES', res.result);
         } catch (e) {
             throw new Error(e.message);
         }
@@ -67,7 +66,21 @@ const actions = {
     async addCharity({commit}, data) {
         try {
             const res = await api.store.addCharity(data);
-            commit('CHARITY_INSTALLED', res.result);
+            commit('CHARITY_ADDED', res.result);
+        } catch (e) {
+            throw new Error(e.message);
+        }
+    },
+    /**
+     * Delete charity from the store
+     * @param commit
+     * @param id
+     * @returns {Promise<void>}
+     */
+    async deleteCharity({commit}, id) {
+        try {
+            const res = await api.store.deleteCharity(id);
+            commit('CHARITY_DELETED', res.result);
         } catch (e) {
             throw new Error(e.message);
         }
@@ -84,14 +97,16 @@ const mutations = {
     UPDATE_CHARITIES(state, data) {
         state.available = data;
     },
-    INSTALLED_CHARITIES(state, data) {
+    FETCH_CHARITIES(state, data) {
         state.installed = data;
     },
     FOUND_CHARITIES(state, data) {
         state.search_result = data;
     },
-    CHARITY_INSTALLED() {
+    CHARITY_ADDED() {
     },
+    CHARITY_DELETED() {
+    }
 }
 
 export default {

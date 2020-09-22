@@ -12,5 +12,9 @@ export default {
     async addCharity(data) {
         const res = await http.post('/store/charities/add', data);
         return res.data;
+    },
+    async deleteCharity(id) {
+        const res = await http.delete(`/store/charities/${id}`);
+        return res.data;
     }
 };

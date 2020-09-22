@@ -1,6 +1,6 @@
 <template>
   <div id="container">
-    <div class="is-full column">
+    <div class="is-full">
       <div class="btn-browse-charities" @click="browseCharities">
         <p>Browse All Charities</p>
       </div>
@@ -20,6 +20,11 @@
               </p>
             </div>
           </div>
+          <div
+              :data-id="charity.id"
+              class="remove-charity"
+              @click="removeCharity($event)">Remove
+          </div>
         </article>
       </div>
     </div>
@@ -27,13 +32,7 @@
 </template>
 
 <script>
-import {library} from '@fortawesome/fontawesome-svg-core';
-import {faEraser, faList, faBorderAll, faLink, faAngleUp, faAngleDown} from '@fortawesome/free-solid-svg-icons';
 import {mapActions, mapGetters, mapState} from "vuex";
-
-library.add([
-  faEraser, faList, faBorderAll, faLink, faAngleUp, faAngleDown
-]);
 
 
 export default {
@@ -60,13 +59,17 @@ export default {
   methods: {
     initEventHandlers() {
       return this.$store.subscribe((mutation, state) => {
-        if (mutation.type === 'charities/INSTALLED_CHARITIES') {
+        if (mutation.type === 'charities/FETCH_CHARITIES') {
           this.installed_charities = this.installedCharities();
+        }
+        if (mutation.type === 'charities/CHARITY_DELETED') {
+          this.fetchCharities();
         }
       });
     },
     ...mapActions({
       fetchCharities: 'charities/fetchCharities',
+      deleteCharity: 'charities/deleteCharity',
     }),
     ...mapGetters({
       installedCharities: 'charities/getInstalledCharities'
@@ -75,7 +78,12 @@ export default {
       this.fetchCharities();
     },
     browseCharities() {
-      this.$router.push({ name: 'charities' });
+      this.$router.push({name: 'charities'});
+    },
+    removeCharity(e) {
+      let charity = e.target;
+      let charityId = charity.attributes["data-id"].value;
+      this.deleteCharity(charityId);
     }
   },
 }
