@@ -9,7 +9,7 @@ export default {
         const res = await http.post('/api/user/key', data);
         return res.data;
     },
-    async setToken(data) {
+    async userToken(data) {
         const res = await http.post('/api/user/token', data);
         return res.data;
     }

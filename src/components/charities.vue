@@ -15,7 +15,8 @@
       </div>
       <div class="selected_categories">
         <div class="category" v-for="category in search_categories">
-          <span class="category" :data-category="category">{{ category }}</span><span class="remove">x</span>
+          <span class="category">{{ category }}</span>
+          <span class="remove" @click="removeSearchCategory(category)">x</span>
         </div>
       </div>
       <div class="categories">
@@ -120,7 +121,7 @@ export default {
     },
     findCharities() {
       let categories = '';
-      this.search_categories.map((el) => categories += `,${el}`)
+      this.search_categories.map((el) => categories += `,${el}`);
 
       this.searchCharities({
         'charity': this.search_charity,
@@ -140,6 +141,11 @@ export default {
       if (category.trim().length && !this.search_categories.includes(category)) {
         this.search_categories.push(category);
       }
+      this.findCharities();
+    },
+    removeSearchCategory(category) {
+      const category_idx = this.search_categories.indexOf(category);
+      this.search_categories.splice(category_idx, 1);
       this.findCharities();
     }
   },

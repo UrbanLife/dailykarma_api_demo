@@ -1,9 +1,31 @@
 <template>
   <div id="container">
     <div class="install-page">
-      <p>You have not installed DailyKarma</p>
-      <div class="install" @click="startInstallation">
+      <p v-if="!install_started">You have not installed DailyKarma</p>
+      <div class="install" @click="install_started=!install_started" v-if="!install_started">
         <p>Install</p>
+      </div>
+
+      <div v-if="install_started">
+        <p>Please, fill out your info</p>
+        <br/>
+        <div class="columns">
+          <div class="user-data column is-2 is-offset-5">
+            <b-input v-model="username" value="" placeholder="username"></b-input>
+            <br/>
+            <b-input type="email"
+                     v-model="email"
+                     value=""
+                     placeholder="email"
+                     maxlength="30">
+            </b-input>
+            <b-input v-model="auth_key" type="text" placeholder="Authorization key"></b-input>
+            <br />
+            <div class="btn-complete" @click="startInstallation">
+              <p>Complete</p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -16,7 +38,11 @@ export default {
   data() {
     return {
       title: 'Daily Karma ShowCase',
-      loadingComponent: null
+      loadingComponent: null,
+      install_started: false,
+      username: '',
+      email: '',
+      auth_key: '',
     }
   },
   created() {
@@ -62,18 +88,12 @@ export default {
     initDashboard() {
     },
     startInstallation() {
-      this.$buefy.dialog.prompt({
-        message: `Enter your Authorization key`,
-        inputAttrs: {
-          placeholder: '',
-          maxlength: 32
-        },
-        trapFocus: true,
-        onConfirm: (auth_key) => this.setAuthorizationKey(auth_key)
-      });
-    },
-    setAuthorizationKey(auth_key) {
-      this.setAuthKey(auth_key)
+      const user_data = {
+        'username': this.username,
+        'email': this.email,
+        'auth_key': this.auth_key,
+      }
+      this.setAuthKey(user_data)
           .then(() => {
             this.$buefy.toast.open({
               message: this.$t('notify.install.auth.key_installed'),

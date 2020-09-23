@@ -5,6 +5,7 @@ const initialState = () => ({
     'available': null,
     'installed': null,
     'search_result': null,
+    'campaigns': null,
 });
 
 const state = initialState();
@@ -20,6 +21,14 @@ const getters = {
      */
     getInstalledCharities(state) {
         return state.installed;
+    },
+    /**
+     * Get store campaigns
+     * @param state
+     * @returns {null|boolean}
+     */
+    getStoreCampaigns(state) {
+        return state.campaigns;
     },
     getFoundCharities(state) {
         return state.search_result;
@@ -53,6 +62,19 @@ const actions = {
         try {
             const res = await api.store.charities();
             commit('FETCH_CHARITIES', res.result);
+        } catch (e) {
+            throw new Error(e.message);
+        }
+    },
+    /**
+     * Get store campaigns
+     * @param commit
+     * @returns {Promise<void>}
+     */
+    async fetchCampaigns({commit}) {
+        try {
+            const res = await api.store.campaigns();
+            commit('FETCH_CAMPAIGNS', res.result);
         } catch (e) {
             throw new Error(e.message);
         }
@@ -99,6 +121,9 @@ const mutations = {
     },
     FETCH_CHARITIES(state, data) {
         state.installed = data;
+    },
+    FETCH_CAMPAIGNS(state, data) {
+        state.campaigns = data;
     },
     FOUND_CHARITIES(state, data) {
         state.search_result = data;

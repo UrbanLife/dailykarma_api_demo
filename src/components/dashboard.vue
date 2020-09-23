@@ -5,27 +5,41 @@
         <p>Browse All Charities</p>
       </div>
     </div>
-    <div class="installed-charities">
-      <div class="box" v-for="charity in installed_charities">
-        <article class="media">
-          <div class="media-left">
-            <figure class="image is-96x96">
-              <img :src="charity.thumbnailUrl||'https://bulma.io/images/placeholders/96x96.png'" :alt="charity.name">
-            </figure>
-          </div>
-          <div class="media-content">
-            <div class="content">
-              <p>
-                <strong>{{ charity.name }}</strong>
-              </p>
+    <div class="columns">
+      <div class="installed-charities column">
+        <p class="dk-title">Installed Charities</p>
+        <div class="box" v-for="charity in installed_charities">
+          <article class="media">
+            <div class="media-left">
+              <figure class="image is-96x96">
+                <img :src="charity.thumbnailUrl||'https://bulma.io/images/placeholders/96x96.png'" :alt="charity.name">
+              </figure>
             </div>
+            <div class="media-content">
+              <div class="content">
+                <p>
+                  <strong>{{ charity.name }}</strong>
+                </p>
+              </div>
+            </div>
+            <div
+                :data-id="charity.id"
+                class="remove-charity"
+                @click="removeCharity($event)">Remove
+            </div>
+          </article>
+        </div>
+      </div>
+      <div class="campaigns column">
+        <p class="dk-title">Store Campaigns</p>
+        <div v-if="store_campaigns">
+          <div class="box"  v-for="campaign in store_campaigns">
+            {{campaign}}
           </div>
-          <div
-              :data-id="charity.id"
-              class="remove-charity"
-              @click="removeCharity($event)">Remove
-          </div>
-        </article>
+        </div>
+        <div v-else>
+          <p>There is no campaigns for the store</p>
+        </div>
       </div>
     </div>
   </div>
@@ -40,6 +54,7 @@ export default {
     return {
       title: 'DailyKarma',
       installed_charities: null,
+      store_campaigns: null,
     };
   },
   created() {
@@ -65,17 +80,23 @@ export default {
         if (mutation.type === 'charities/CHARITY_DELETED') {
           this.fetchCharities();
         }
+        if (mutation.type === 'charities/FETCH_CAMPAIGNS') {
+          this.store_campaigns = this.storeCampaigns();
+        }
       });
     },
     ...mapActions({
       fetchCharities: 'charities/fetchCharities',
+      fetchCampaigns: 'charities/fetchCampaigns',
       deleteCharity: 'charities/deleteCharity',
     }),
     ...mapGetters({
-      installedCharities: 'charities/getInstalledCharities'
+      installedCharities: 'charities/getInstalledCharities',
+      storeCampaigns: 'charities/getStoreCampaigns'
     }),
     initDashboard() {
       this.fetchCharities();
+      this.fetchCampaigns();
     },
     browseCharities() {
       this.$router.push({name: 'charities'});

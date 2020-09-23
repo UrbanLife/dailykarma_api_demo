@@ -1,5 +1,13 @@
 #container {
 
+  p.dk-title {
+    color: #5a5c9d;
+    font-size: 14pt;
+    font-weight: 600;
+    margin-bottom: 16px;
+    text-align: center;
+  }
+
   .install-page {
     text-align: center;
 
@@ -22,6 +30,20 @@
       p {
         font-size: 16pt;
         transform: translateY(16px);
+      }
+    }
+
+    .user-data {
+      .btn-complete {
+        width: 160px;
+        height: 40px;
+        @include button(#FFF, #000);
+        @include box-shadow(0, 0, 10px, rgba(0, 0, 0, 0.1));
+
+        p {
+          font-size: 12pt;
+          transform: translateY(6px);
+        }
       }
     }
   }
@@ -74,6 +96,12 @@
         width: 20px;
         text-align: center;
         cursor: pointer;
+        border: 1px solid transparent;
+
+        &:hover {
+          border: 1px solid #f185ca;
+          @include rounded(0.3em);
+        }
       }
     }
 

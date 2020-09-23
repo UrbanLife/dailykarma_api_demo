@@ -49,26 +49,28 @@ def set_user_auth_key():
     :return:
     """
     data = request.get_json()
-    res = {'auth_key': ''}
     res_error = {
-        'error': {
-            'message': 'Can not set authorization key'
-        }
+        'message': 'Bad request'
     }
-    if 'auth_key' in data:
-        try:
-            user = User.create(username='test', email='test@email.com', auth_key=data['auth_key'])
-            user.save()
-            res['auth_key'] = user.auth_key
-            return res, 201
-        except Exception as e:
-            ...
+    try:
+        user = User.select().where(User.email == data['email']).get()
+        user.auth_key = data['auth_key']
+        user.username = data['username']
+        user.email = data['email']
+        user.save()
+        return user.serialize(), 200
+    except User.DoesNotExist:
+        user = User.create(username=data['username'], email=data['email'], auth_key=data['auth_key'])
+        user.save()
+        return user.serialize(), 201
+    except Exception as e:
+        print(e)
 
     return res_error, 400
 
 
 @system_bp.route('/user/token', methods=['POST'])
-def set_user_token():
+def user_token():
     """
     Set user auth token
     :return:
@@ -76,15 +78,20 @@ def set_user_token():
     data = request.get_json()
     res = {'token': ''}
     res_error = {
-        'error': {
-            'message': 'Can not set user authorization token'
-        }
+        'message': 'Can not set user authorization token'
     }
     if 'token' in data:
         try:
-            user = User.select().where(User.username == 'test').get()
+            user = User.select().where(User.email == data['email']).get()
             user.token = data['token']
             user.save()
+            return res, 200
+        except User.DoesNotExist:
+            ...
+    else:
+        try:
+            user = User.select().where(User.email == data['email']).get()
+            res['token'] = user.token
             return res, 200
         except Exception as e:
             ...

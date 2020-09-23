@@ -38,23 +38,33 @@ const getters = {
  * User state actions
  */
 const actions = {
-    async setAuthKey({commit}, auth_key) {
+    async getUserToken({commit, state}) {
         try {
-            let res = await api.auth.setAuthKey({'auth_key': auth_key});
-            commit('SET_AUTH_KEY', res);
-            return true;
+            let res = await api.auth.userToken({'email': state.user_data.email});
+            commit('GET_USER_TOKEN', res);
+            return res.data;
         } catch (e) {
-            throw new Error(e);
+            throw new Error(e.response.data.message);
+        }
+    },
+    async setAuthKey({commit}, data) {
+        try {
+            let res = await api.auth.setAuthKey(data);
+            commit('SET_AUTH_KEY', res);
+        } catch (e) {
+            throw new Error(e.response.data.message);
         }
     },
     async runAuthorization({commit, state}) {
         try {
             let res = await api.store.install(state.user_data);
             commit('INSTALL_AUTHORIZED', res);
-            await api.auth.setToken({'token': res.token});
+            await api.auth.userToken({
+                'token': res.token,
+                'email': state.user_data.email
+            });
         } catch (e) {
-            console.log(e);
-            throw new Error(e);
+            throw new Error(e.response.data.message);
         }
     },
 }
@@ -63,9 +73,15 @@ const actions = {
  * Charities state mutations
  */
 const mutations = {
+    GET_USER_TOKEN(state, data) {
+        localStorage.setItem('token', data.token);
+        state.token = data.token;
+    },
     SET_AUTH_KEY(state, data) {
         localStorage.setItem('auth_key', data.auth_key);
         state.auth_key = data.auth_key;
+        state.user_data.name = data.username;
+        state.user_data.email = data.email;
     },
     INSTALL_AUTHORIZED(state, data) {
         localStorage.setItem('token', data.token);
