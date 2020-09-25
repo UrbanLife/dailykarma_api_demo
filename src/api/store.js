@@ -21,4 +21,24 @@ export default {
         const res = await http.get('/store/campaigns');
         return res.data;
     },
+    async infoCampaign(type) {
+        const res = await http.get(`/store/campaigns/${type}`);
+        return res.data;
+    },
+    async createCampaign(data) {
+        const res = await http.post(`/store/campaigns/${data.type}`, data.payload);
+        return res.data;
+    },
+    async updateCampaign(type) {
+        const res = await http.put(`/store/campaigns/${type}`);
+        return res.data;
+    },
+    async activateCampaign(type) {
+        const res = await http.post(`/store/campaigns/${type}/activate`);
+        return res.data;
+    },
+    async stopCampaign(type) {
+        const res = await http.post(`/store/campaigns/${type}/stop`);
+        return res.data;
+    }
 };

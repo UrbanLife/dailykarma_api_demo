@@ -5,8 +5,12 @@ export default {
         const res = await http.post('/api/auth', data);
         return res.data;
     },
-    async setAuthKey(data) {
-        const res = await http.post('/api/user/key', data);
+    async setStoreData(data) {
+        const res = await http.post('/api/store', data);
+        return res.data;
+    },
+    async getStoreData(email) {
+        const res = await http.get(`/api/store/${email}`);
         return res.data;
     },
     async userToken(data) {

@@ -11,7 +11,7 @@ const initialState = () => ({
 const state = initialState();
 
 /**
- * User state getters
+ * Charity state getters
  */
 const getters = {
     /**
@@ -30,13 +30,18 @@ const getters = {
     getStoreCampaigns(state) {
         return state.campaigns;
     },
+    /**
+     * Get Found charities
+     * @param state
+     * @returns {null}
+     */
     getFoundCharities(state) {
         return state.search_result;
     }
 }
 
 /**
- * User state actions
+ * Charity state actions
  */
 const actions = {
     /**
@@ -113,7 +118,7 @@ const actions = {
 }
 
 /**
- * Charities state mutations
+ * Charity state mutations
  */
 const mutations = {
     UPDATE_CHARITIES(state, data) {

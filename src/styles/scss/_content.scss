@@ -9,8 +9,9 @@
   }
 
   .install-page {
-    text-align: center;
-
+    p {
+      text-align: center;
+    }
     & > p {
       font-size: 18pt;
       margin-top: 100px;
@@ -34,6 +35,12 @@
     }
 
     .user-data {
+      text-align: center;
+
+      input {
+        margin: 4px 0;
+      }
+
       .btn-complete {
         width: 160px;
         height: 40px;
@@ -48,8 +55,7 @@
     }
   }
 
-  .installed-charities {
-    width: 600px;
+  .charities, .campaigns {
     line-height: 1.2;
 
     .box {

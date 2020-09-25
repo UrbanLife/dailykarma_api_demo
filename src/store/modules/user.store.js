@@ -5,22 +5,7 @@ import api from 'api';
 const initialState = () => ({
     'auth_key': null,
     'token': null,
-    'user_data': {
-        "domain": "test.qa",
-        "name": "QA Test Store",
-        "currency": "USD",
-        "owner": "QA Tester",
-        "email": "tester@test.qa",
-        "timezone": "America/Los_Angeles",
-        "address": {
-            "line1": "227 Broadway",
-            "line2": "Ste 302",
-            "city": "Santa Monica",
-            "province": "CA",
-            "postalCode": "90401",
-            "country": "USA"
-        }
-    }
+    'user_data': null,
 });
 
 const state = initialState();
@@ -31,6 +16,9 @@ const state = initialState();
 const getters = {
     getAuthKey(state) {
         return state.auth_key;
+    },
+    userData(state) {
+        return state.user_data;
     },
 }
 
@@ -47,10 +35,18 @@ const actions = {
             throw new Error(e.response.data.message);
         }
     },
-    async setAuthKey({commit}, data) {
+    async setStoreData({commit}, data) {
         try {
-            let res = await api.auth.setAuthKey(data);
-            commit('SET_AUTH_KEY', res);
+            let res = await api.auth.setStoreData(data);
+            commit('SET_STORE_DATA', res);
+        } catch (e) {
+            throw new Error(e.response.data.message);
+        }
+    },
+    async getStoreData({commit}, email) {
+        try {
+            let res = await api.auth.getStoreData(email);
+            commit('GET_STORE_DATA', res);
         } catch (e) {
             throw new Error(e.response.data.message);
         }
@@ -77,15 +73,29 @@ const mutations = {
         localStorage.setItem('token', data.token);
         state.token = data.token;
     },
-    SET_AUTH_KEY(state, data) {
+    SET_STORE_DATA(state, data) {
         localStorage.setItem('auth_key', data.auth_key);
         state.auth_key = data.auth_key;
-        state.user_data.name = data.username;
+        state.user_data.owner = data.owner;
         state.user_data.email = data.email;
+        state.user_data.domain = data.domain;
+        state.user_data.name = data.name;
+        state.user_data.currency = data.currency;
+        state.user_data.timezone = data.timezone;
+        state.user_data.address = {
+            'line1': data.address,
+            'city': data.city,
+            'province': data.province,
+            'postalCode': data.postalCode,
+            'country': data.country,
+        };
     },
     INSTALL_AUTHORIZED(state, data) {
         localStorage.setItem('token', data.token);
         state.token = data.token;
+    },
+    GET_STORE_DATA(state, data) {
+        state.user_data = data;
     },
 }
 

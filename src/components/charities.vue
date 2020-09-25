@@ -90,23 +90,23 @@ export default {
   },
   computed: {
     ...mapGetters({
-      foundCharities: 'charities/getFoundCharities',
+      foundCharities: 'charity/getFoundCharities',
     }),
   },
   methods: {
     initEventHandlers() {
       return this.$store.subscribe((mutation, state) => {
-        if (mutation.type === 'charities/FOUND_CHARITIES') {
+        if (mutation.type === 'charity/FOUND_CHARITIES') {
         }
-        if (mutation.type === 'charities/CHARITY_ADDED') {
+        if (mutation.type === 'charity/CHARITY_ADDED') {
           this.$router.push({name: 'dashboard'});
         }
       });
     },
     ...mapActions({
-      searchCharities: 'charities/searchCharities',
-      eraseSearchResult: 'charities/eraseSearchResult',
-      addCharity: 'charities/addCharity',
+      searchCharities: 'charity/searchCharities',
+      eraseSearchResult: 'charity/eraseSearchResult',
+      addCharity: 'charity/addCharity',
     }),
     showLoader(status) {
       if (status) {

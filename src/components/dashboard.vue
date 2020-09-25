@@ -1,13 +1,11 @@
 <template>
   <div id="container">
-    <div class="is-full">
-      <div class="btn-browse-charities" @click="browseCharities">
-        <p>Browse All Charities</p>
-      </div>
-    </div>
     <div class="columns">
-      <div class="installed-charities column">
+      <div class="charities column is-4 is-offset-1">
         <p class="dk-title">Installed Charities</p>
+        <div class="btn-browse-charities" @click="browseCharities">
+          <p>Browse All Charities</p>
+        </div>
         <div class="box" v-for="charity in installed_charities">
           <article class="media">
             <div class="media-left">
@@ -30,15 +28,17 @@
           </article>
         </div>
       </div>
-      <div class="campaigns column">
+      <div class="campaigns column is-4 is-offset-2">
         <p class="dk-title">Store Campaigns</p>
-        <div v-if="store_campaigns">
-          <div class="box"  v-for="campaign in store_campaigns">
-            {{campaign}}
-          </div>
+        <div class="btn-browse-charities" @click="createNewCampaign">
+          <p>Create Campaign</p>
         </div>
-        <div v-else>
-          <p>There is no campaigns for the store</p>
+        <div class="box" v-for="campaign in store_campaigns">
+          <p>Type: <span>{{ campaign.type }}</span></p>
+          <p>Connected: <span>{{ campaign.connected }}</span></p>
+          <ul v-for="item in campaign.items">
+            <li>{{ item.sku }}</li>
+          </ul>
         </div>
       </div>
     </div>
@@ -69,37 +69,50 @@ export default {
     this.unSubscribeEvents();
   },
   computed: {
-    ...mapState(['charities'])
+    ...mapState(['charity'])
   },
   methods: {
     initEventHandlers() {
       return this.$store.subscribe((mutation, state) => {
-        if (mutation.type === 'charities/FETCH_CHARITIES') {
+        if (mutation.type === 'charity/FETCH_CHARITIES') {
           this.installed_charities = this.installedCharities();
         }
-        if (mutation.type === 'charities/CHARITY_DELETED') {
+        if (mutation.type === 'charity/CHARITY_DELETED') {
           this.fetchCharities();
         }
-        if (mutation.type === 'charities/FETCH_CAMPAIGNS') {
+        if (mutation.type === 'campaign/GET_ALL_CAMPAIGNS') {
           this.store_campaigns = this.storeCampaigns();
         }
       });
     },
     ...mapActions({
-      fetchCharities: 'charities/fetchCharities',
-      fetchCampaigns: 'charities/fetchCampaigns',
-      deleteCharity: 'charities/deleteCharity',
+      fetchCharities: 'charity/fetchCharities',
+      deleteCharity: 'charity/deleteCharity',
+      getAllCampaigns: 'campaign/getAll',
+      createCampaign: 'campaign/create',
     }),
     ...mapGetters({
-      installedCharities: 'charities/getInstalledCharities',
-      storeCampaigns: 'charities/getStoreCampaigns'
+      installedCharities: 'charity/getInstalledCharities',
+      storeCampaigns: 'campaign/getStoreCampaigns'
     }),
     initDashboard() {
       this.fetchCharities();
-      this.fetchCampaigns();
+      this.getAllCampaigns();
     },
     browseCharities() {
       this.$router.push({name: 'charities'});
+    },
+    createNewCampaign() {
+      this.createCampaign({
+        "type": "donation-tiers",
+        "payload": {
+          "items": [
+            {"amount": 1, "sku": "test_A", "type": "fixed"},
+            {"amount": 2, "sku": "test_B"},
+            {"amount": 3, "sku": "test_C"}
+          ]
+        }
+      });
     },
     removeCharity(e) {
       let charity = e.target;

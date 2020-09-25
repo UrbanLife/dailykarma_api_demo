@@ -42,31 +42,36 @@ def check_auth():
     return res, 200
 
 
-@system_bp.route('/user/key', methods=['POST'])
-def set_user_auth_key():
-    """
-    Get user information by it's auth_key
-    :return:
-    """
+@system_bp.route('/store', methods=['POST'])
+def set_store_data():
     data = request.get_json()
     res_error = {
         'message': 'Bad request'
     }
     try:
         user = User.select().where(User.email == data['email']).get()
-        user.auth_key = data['auth_key']
-        user.username = data['username']
-        user.email = data['email']
+        user.update(**data)
         user.save()
         return user.serialize(), 200
     except User.DoesNotExist:
-        user = User.create(username=data['username'], email=data['email'], auth_key=data['auth_key'])
+        user = User.create(**data)
         user.save()
         return user.serialize(), 201
     except Exception as e:
         print(e)
 
     return res_error, 400
+
+
+@system_bp.route('/store/<email>', methods=['GET'])
+def get_store_data(email):
+    try:
+        user = User.select().where(User.email == email).get()
+        return user.serialize(), 200
+    except Exception as e:
+        print(e)
+
+    return {}, 200
 
 
 @system_bp.route('/user/token', methods=['POST'])

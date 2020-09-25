@@ -24,12 +24,6 @@
 
       <template slot="end">
         <b-navbar-item tag="div">
-          <p class="control has-icons-left">
-              <input class="input" type="text" placeholder="Search">
-              <span class="icon is-left">
-                  <b-icon icon="search" size="is-small"></b-icon>
-              </span>
-            </p>
         </b-navbar-item>
       </template>
     </b-navbar>
