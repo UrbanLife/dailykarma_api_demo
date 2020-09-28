@@ -8,6 +8,7 @@ Vue.use(Router)
 const routerOptions = [
     {path: '/install', component: 'install', name: 'install'},
     {path: '/charities', component: 'charities', name: 'charities'},
+    {path: '/campaign', component: 'campaign', name: 'campaign'},
     {path: '/', component: 'dashboard', name: 'dashboard'},
 ]
 

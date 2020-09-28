@@ -11,6 +11,8 @@ $twitter: #4099FF;
 $twitter-invert: findColorInvert($twitter);
 $modal-background-background-color: rgba(10, 10, 10, 0.56);
 $dropdown-background-color: rgba(10, 10, 10, 0.56);
+$danger: #e31e90;
+$success: #0e9b38;
 
 // Setup $colors to use as bulma classes (e.g. 'is-twitter')
 $colors: (

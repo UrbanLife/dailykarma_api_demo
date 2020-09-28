@@ -1,0 +1,8 @@
+.block {
+  .campaign-items {
+    background-color: #f7fffe;
+    padding: 10px;
+    border: 1px solid #eee;
+    @include rounded();
+  }
+}

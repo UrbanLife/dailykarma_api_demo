@@ -1,7 +1,7 @@
 <template>
   <div id="container">
-    <div class="columns">
-      <div class="charities column is-4 is-offset-1">
+    <div class="columns is-mobile is-centered">
+      <div class="charities column is-4">
         <p class="dk-title">Installed Charities</p>
         <div class="btn-browse-charities" @click="browseCharities">
           <p>Browse All Charities</p>
@@ -20,25 +20,61 @@
                 </p>
               </div>
             </div>
-            <div
+            <b-button
                 :data-id="charity.id"
                 class="remove-charity"
-                @click="removeCharity($event)">Remove
-            </div>
+                @click="removeCharity($event)"
+                type="is-danger is-light is-small is-rounded">Remove
+            </b-button>
           </article>
         </div>
       </div>
-      <div class="campaigns column is-4 is-offset-2">
+      <div class="campaigns column is-4 is-offset-1">
         <p class="dk-title">Store Campaigns</p>
         <div class="btn-browse-charities" @click="createNewCampaign">
           <p>Create Campaign</p>
         </div>
         <div class="box" v-for="campaign in store_campaigns">
-          <p>Type: <span>{{ campaign.type }}</span></p>
-          <p>Connected: <span>{{ campaign.connected }}</span></p>
-          <ul v-for="item in campaign.items">
-            <li>{{ item.sku }}</li>
-          </ul>
+          <!-- Percent Of Sales -->
+          <div v-if="campaign.type == campaign_percent_sales">
+            <div class="block">
+              Type: <span class="title"><i>{{ campaign_type[campaign_percent_sales] }}</i></span>
+              <b-button v-if="campaign.connected"
+                        class="disconnect-campaign"
+                        @click="disconnectCampaign(campaign_percent_sales)"
+                        type="is-warning is-light is-small is-pulled-right">Disconnect
+              </b-button>
+              <b-button v-else
+                        class="connect-campaign"
+                        @click="connectCampaign(campaign_percent_sales)"
+                        type="is-success is-light is-small is-pulled-right">Connect
+              </b-button>
+            </div>
+            <ul v-for="item in campaign.items">
+              <li><span>Amount:&nbsp;</span>{{ item.amount }}</li>
+              <li><span>Type:&nbsp;</span>{{ item.type }}</li>
+            </ul>
+          </div>
+          <!-- Donation Tiers -->
+          <div v-if="campaign.type == campaign_donation_tiers">
+            <div class="block">
+              Type: <span class="title"><i>{{ campaign_type[campaign_donation_tiers] }}</i></span>
+              <b-button v-if="campaign.connected"
+                        class="disconnect-campaign"
+                        @click="disconnectCampaign(campaign_donation_tiers)"
+                        type="is-warning is-light is-small is-pulled-right">Disconnect
+              </b-button>
+              <b-button v-else
+                        class="connect-campaign"
+                        @click="connectCampaign(campaign_donation_tiers)"
+                        type="is-success is-light is-small is-pulled-right">Connect
+              </b-button>
+            </div>
+            <ul v-for="item in campaign.items">
+              <li><span>Amount:&nbsp;</span>{{ item.amount }}</li>
+              <li><span>SKU:&nbsp;</span>{{ item.sku }}</li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
@@ -55,6 +91,12 @@ export default {
       title: 'DailyKarma',
       installed_charities: null,
       store_campaigns: null,
+      campaign_type: {
+        "percent-of-sales": "Percent Of Sales",
+        "donation-tiers": "Donation Tiers"
+      },
+      campaign_percent_sales: 'percent-of-sales',
+      campaign_donation_tiers: 'donation-tiers',
     };
   },
   created() {
@@ -83,13 +125,28 @@ export default {
         if (mutation.type === 'campaign/GET_ALL_CAMPAIGNS') {
           this.store_campaigns = this.storeCampaigns();
         }
+        if (mutation.type === 'campaign/ACTIVATE_CAMPAIGN') {
+          this.$buefy.toast.open({
+            message: this.$t('notify.campaign.activate.success'),
+            type: 'is-success'
+          });
+          this.getAllCampaigns();
+        }
+        if (mutation.type === 'campaign/STOP_CAMPAIGN') {
+          this.$buefy.toast.open({
+            message: this.$t('notify.campaign.deactivate.success'),
+            type: 'is-success'
+          });
+          this.getAllCampaigns();
+        }
       });
     },
     ...mapActions({
       fetchCharities: 'charity/fetchCharities',
       deleteCharity: 'charity/deleteCharity',
       getAllCampaigns: 'campaign/getAll',
-      createCampaign: 'campaign/create',
+      activateCampaign: 'campaign/activate',
+      deactivateCampaign: 'campaign/stop',
     }),
     ...mapGetters({
       installedCharities: 'charity/getInstalledCharities',
@@ -103,21 +160,18 @@ export default {
       this.$router.push({name: 'charities'});
     },
     createNewCampaign() {
-      this.createCampaign({
-        "type": "donation-tiers",
-        "payload": {
-          "items": [
-            {"amount": 1, "sku": "test_A", "type": "fixed"},
-            {"amount": 2, "sku": "test_B"},
-            {"amount": 3, "sku": "test_C"}
-          ]
-        }
-      });
+      this.$router.push({name: 'campaign'});
     },
     removeCharity(e) {
       let charity = e.target;
       let charityId = charity.attributes["data-id"].value;
       this.deleteCharity(charityId);
+    },
+    connectCampaign(type) {
+      this.activateCampaign(type);
+    },
+    disconnectCampaign(type) {
+      this.deactivateCampaign(type);
     }
   },
 }

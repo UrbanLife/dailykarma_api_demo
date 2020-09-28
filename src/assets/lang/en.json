@@ -6,6 +6,17 @@
       "auth": {
         "key_installed": "Auth key has been set"
       }
+    },
+    "campaign": {
+      "create": {
+        "success": "New Campaign Added"
+      },
+      "activate": {
+        "success": "Campaign activated successfully"
+      },
+      "deactivate": {
+        "success": "Campaign deactivated successfully"
+      }
     }
   }
 }
