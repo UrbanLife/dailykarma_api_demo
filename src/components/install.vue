@@ -13,7 +13,7 @@
         <br/>
         <div class="columns">
           <div class="column is-half">
-            <b-input v-model="owner" value="" placeholder="username"></b-input>
+            <b-input v-model="owner" value="" placeholder="owner full name"></b-input>
             <b-input v-on:blur="fetchStoreData" type="email" v-model="email" value="" placeholder="email" maxlength="30"></b-input>
             <b-input v-model="auth_key" type="text" placeholder="Authorization key"></b-input>
           </div>
@@ -22,10 +22,10 @@
             <b-input v-model="name" value="" placeholder="store name"></b-input>
             <b-input v-model="currency" value="" placeholder="currency"></b-input>
             <b-input v-model="timezone" value="" placeholder="timezone"></b-input>
-            <b-input v-model="line1" value="" placeholder="Address"></b-input>
+            <b-input v-model="line1" value="" placeholder="address"></b-input>
             <b-input v-model="city" value="" placeholder="city"></b-input>
             <b-input v-model="province" value="" placeholder="province"></b-input>
-            <b-input v-model="postalCode" value="" placeholder="ZIP"></b-input>
+            <b-input v-model="postalCode" value="" placeholder="postal code"></b-input>
             <b-input v-model="country" value="" placeholder="country"></b-input>
           </div>
         </div>
