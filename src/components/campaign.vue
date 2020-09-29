@@ -2,7 +2,9 @@
   <div id="container">
     <div class="columns is-mobile">
       <div class="column is-4">
-        <div class="block">
+        <fieldset>
+          <legend>Select Campaign Type</legend>
+          <div class="block">
           <b-radio v-model="campaign_type"
                    name="name"
                    native-value="percent-of-sales">
@@ -14,6 +16,7 @@
             Donation Tiers
           </b-radio>
         </div>
+        </fieldset>
         <div v-if="campaign_type == 'percent-of-sales'" class="columns percent-of-sales">
           <div class="column is-half">
             <div class="block">

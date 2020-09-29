@@ -40,5 +40,17 @@ export default {
     async stopCampaign(type) {
         const res = await http.post(`/store/campaigns/${type}/stop`);
         return res.data;
+    },
+    async addOrder(data) {
+        const res = await http.post('/store/orders/add', data);
+        return res.data;
+    },
+    async refundOrder(id) {
+        const res = await http.put(`/store/orders/${id}/refund`);
+        return res.data;
+    },
+    async getOrders() {
+        const res = await http.get('/store/orders/');
+        return res.data;
     }
 };

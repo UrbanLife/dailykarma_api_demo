@@ -13,7 +13,7 @@
         <br/>
         <div class="columns">
           <div class="column is-half">
-            <b-input v-model="owner" value="" placeholder="username"></b-input>
+            <b-input v-model="owner" value="" placeholder="owner"></b-input>
             <b-input v-on:blur="fetchStoreData" type="email" v-model="email" value="" placeholder="email" maxlength="30"></b-input>
             <b-input v-model="auth_key" type="text" placeholder="Authorization key"></b-input>
           </div>

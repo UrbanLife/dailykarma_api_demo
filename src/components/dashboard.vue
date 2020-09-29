@@ -29,7 +29,7 @@
           </article>
         </div>
       </div>
-      <div class="campaigns column is-4 is-offset-1">
+      <div class="campaigns column is-4">
         <p class="dk-title">Store Campaigns</p>
         <div class="btn-browse-charities" @click="createNewCampaign">
           <p>Create Campaign</p>
@@ -75,6 +75,14 @@
               <li><span>SKU:&nbsp;</span>{{ item.sku }}</li>
             </ul>
           </div>
+        </div>
+      </div>
+      <div class="campaigns column is-4">
+        <p class="dk-title">Store Orders</p>
+        <div class="btn-add-order" @click="addNewOrder">
+          <p>Add Order</p>
+        </div>
+        <div class="box">
         </div>
       </div>
     </div>
@@ -147,6 +155,7 @@ export default {
       getAllCampaigns: 'campaign/getAll',
       activateCampaign: 'campaign/activate',
       deactivateCampaign: 'campaign/stop',
+      getAllOrders: 'order/getAll',
     }),
     ...mapGetters({
       installedCharities: 'charity/getInstalledCharities',
@@ -161,6 +170,9 @@ export default {
     },
     createNewCampaign() {
       this.$router.push({name: 'campaign'});
+    },
+    addNewOrder() {
+      this.$router.push({name: 'order'});
     },
     removeCharity(e) {
       let charity = e.target;

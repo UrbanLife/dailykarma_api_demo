@@ -98,7 +98,7 @@
     }
   }
 
-  .btn-browse-charities {
+  .btn-browse-charities, .btn-add-order {
     margin-bottom: 20px;
     @include button(#44be2b, #fff);
   }
@@ -168,6 +168,27 @@
         .install-charity {
           margin: 4px 10px 4px auto;
           @include button(#e369b0, #fff);
+        }
+      }
+    }
+  }
+
+  fieldset {
+    background-color: #f7fffe;
+    padding: 10px;
+    border: 1px solid #eee;
+    color: #5f5f5f;
+    @include rounded(5px);
+  }
+
+  .order {
+    .order-items {
+      table {
+        tbody {
+          tr:hover {
+            background-color: #379cee;
+            color: #fff;
+          }
         }
       }
     }
